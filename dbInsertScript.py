@@ -13,9 +13,10 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS teaterstykker
                 name TEXT)''')
 
 #prisgrupperITeaterstyker
-cursor.execute('''CREATE TABLE IF NOT EXISTS prisgrupperITeaterstyker
+cursor.execute('''CREATE TABLE IF NOT EXISTS prisgrupperITeaterstykker
                 (prisgruppe_id INTEGER,
                 teaterstykke_id INTEGER,
+                pris INTEGER NOT NULL,
                 PRIMARY KEY(prisgruppe_id, teaterstykke_id),
                 FOREIGN KEY(prisgruppe_id) REFERENCES prisgrupper(id),
                 FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id))''')
@@ -110,13 +111,6 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS ansattIoppgave
                FOREIGN KEY(ansatt_id) REFERENCES ansatt(ansatt_id),
                FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id),
                FOREIGN KEY(oppgavetype) REFERENCES oppgaver(oppgavetype))''')
-cursor.execute('''CREATE TABLE IF NOT EXISTS priserIForestilling
-               (prisgruppe_id INTEGER NOT NULL,
-               forestilling_id INTEGER NOT NULL,
-               pris INTEGER NOT NULL,
-               PRIMARY KEY(prisgruppe_id, forestilling_id),
-               FOREIGN KEY(prisgruppe_id) REFERENCES prisgrupper(id),
-               FOREIGN KEY(forestilling_id) REFERENCES forestilling(forestilling_id))''')
 
 
 con.commit()
@@ -129,16 +123,24 @@ if(con.execute('''SELECT * FROM teaterstykker''').fetchone() == None):
 # insert Saler
 if(con.execute('''SELECT * FROM Teatersal''').fetchone() == None):
     con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vinter2024', 'gamle scene', 332)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vinter2024', 'hoved scene', 516)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vinter2024', 'hovedscene', 516)''')
     con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vår2024', 'gamle scene', 332)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vår2024', 'hoved scene', 516)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vår2024', 'hovedscene', 516)''')
 
 # insert foretillinger
 
-KongesemneneForestillinger = ['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05']
+KongesemneneForestillinger = ['2024-02-01', '2024-02-02', '2024-02-03', '2024-02-05', '2024-02-06']
+StørstAvAltErKjærlighetenForestillinger = ['2024-02-03', '2024-02-06', '2024-02-07', '2024-02-12', '2024-02-13, 2024-02-14']
 if(con.execute('''SELECT * FROM forestilling''').fetchone() == None):
-    # con.execute('''INSERT INTO forestilling (forestilling_id, sesong, salNavn, dato, klokkeslett, teaterstykke_id) VALUES (1, 'høst', 'gamle scene', '2020-10-10', '19:00', 1)''')
-    # con.execute('''INSERT INTO forestilling (forestilling_id, sesong, salNavn, dato, klokkeslett, teaterstykke_id) VALUES (2, 'høst', 'hoved scene', '2020-10-10', '19:00', 2)''')
+    id =0
+    for i in KongesemneneForestillinger:
+        con.execute('''INSERT INTO forestilling (forestilling_id, sesong, salNavn, dato, klokkeslett, teaterstykke_id) VALUES (id, 'vinter2024', 'hovedscene', i, '19:00', 1)''')
+        id += 1
+    for i in StørstAvAltErKjærlighetenForestillinger:
+        con.execute('''INSERT INTO forestilling (forestilling_id, sesong, salNavn, dato, klokkeslett, teaterstykke_id) VALUES (id, 'vinter2024', 'gamle scene', i, '18:30', 2)''')
+        id += 1
+    con.commit()
+
 
 # insert prisgrupper
 if(con.execute('''SELECT * FROM prisgrupper''').fetchone() == None):
@@ -153,31 +155,33 @@ if(con.execute('''SELECT * FROM prisgrupper''').fetchone() == None):
 # insert prisgrupperITeaterstykker
 Kongesemnene = [1,2,3,5,6]
 StørstAvAltErKjærligheten = [1,2,3,4,5,6]
-
-if(con.execute('''SELECT * FROM prisgrupperITeaterstyker''').fetchone() == None):
-    for i in Kongesemnene:
-        con.execute('''INSERT INTO prisgrupperITeaterstyker (prisgruppe_id, teaterstykke_id) VALUES (i, 1)''')
-    for i in StørstAvAltErKjærligheten:
-        con.execute('''INSERT INTO prisgrupperITeaterstyker (prisgruppe_id, teaterstykke_id) VALUES (i, 2)''')
-    con.commit()
-
-# insert priserIForestilling
 KongesemnenePriser = [450,380,280,420,360]
 StørstAvAltErKjærlighetenPriser = [350,300,220,220,320,270]
 
-if(con.execute('''SELECT * FROM priserIForestilling''').fetchone() == None):
-    for i in range(len(KongesemnenePriser)):
-        con.execute('''INSERT INTO priserIForestilling (prisgruppe_id, forestilling_id, pris) VALUES (i, 1, KongesemnenePriser[i])''')
-    for i in range(len(StørstAvAltErKjærlighetenPriser)):
-        con.execute('''INSERT INTO priserIForestilling (prisgruppe_id, forestilling_id, pris) VALUES (i, 2, StørstAvAltErKjærlighetenPriser[i])''')
+if(con.execute('''SELECT * FROM prisgrupperITeaterstykker''').fetchone() == None):
+    for i in range(len(Kongesemnene)):
+        con.execute('''INSERT INTO prisgrupperITeaterstyker (prisgruppe_id, teaterstykke_id, pris) VALUES (kongesemnene[i], 1, KongesemnenePriser[i])''')
+    for i in range(len(StørstAvAltErKjærligheten)):
+        con.execute('''INSERT INTO prisgrupperITeaterstyker (prisgruppe_id, teaterstykke_id, pris) VALUES (StørstAvAltErKjærligheten[i], 2, StørstAvAltErKjærlighetenPriser[i])''')
+    con.commit()
 
+#TODO: insert stoler
+#TODO: insert billetter
+#TODO: insert ansatt
+#TODO: insert oppgaver
+#TODO: insert ansattIoppgave
+#TODO: insert akt
+#TODO: insert roller
+#TODO: insert skuespillere
+#TODO: insert skuespillerIRolle
+#TODO: insert rolleiakt
 
 # Insert data
 
 gamleScene = 'db-projekt/gamle-scene.txt'
 hovedScene = 'db-projekt/hoved-scenen.txt'
 
-# read gamle scene data
+# les gamle scene data
 
 openFile = open(gamleScene, 'r')
 lines = openFile.readlines()
