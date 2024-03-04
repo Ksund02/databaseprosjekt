@@ -4,165 +4,187 @@ con = sqlite3.connect('teater.db')
 cursor = con.cursor()
 
 # Create tables
-cursor.execute('''CREATE TABLE IF NOT EXISTS prisgrupper
-                (id INTEGER NOT NULL PRIMARY KEY,
-                prisgruppe TEXT)''')
-#teaterstykker
-cursor.execute('''CREATE TABLE IF NOT EXISTS teaterstykker
-                (id INTEGER NOT NULL PRIMARY KEY,
-                name TEXT)''')
 
-#prisgrupperITeaterstyker
-cursor.execute('''CREATE TABLE IF NOT EXISTS prisgrupperITeaterstykker
-                (prisgruppe_id INTEGER,
-                teaterstykke_id INTEGER,
-                pris INTEGER NOT NULL,
-                PRIMARY KEY(prisgruppe_id, teaterstykke_id),
-                FOREIGN KEY(prisgruppe_id) REFERENCES prisgrupper(id),
-                FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id))''')
-
-#akt
-cursor.execute('''CREATE TABLE IF NOT EXISTS akt
-                (aktnummer INTEGER NOT NULL,
-                teaterstykke_id INTEGER NOT NULL,
-                aktNavn TEXT,
-                PRIMARY KEY(aktnummer, teaterstykke_id),
-                FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id))''')
-#roller
-cursor.execute('''CREATE TABLE IF NOT EXISTS roller
-                (teaterstykke_id INTEGER NOT NULL,
-                rollenavn TEXT,
-                PRIMARY KEY(rollenavn, teaterstykke_id),
-                FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id))''')
-#skuespillere
-cursor.execute('''CREATE TABLE IF NOT EXISTS skuespillere
-                (id INTEGER PRIMARY KEY,
-                navn TEXT)''')
-#skuespillerIRolle
-cursor.execute('''CREATE TABLE IF NOT EXISTS skuespillerIRolle
-                (skuespiller_id INTEGER NOT NULL,
-                rolleNavn INTEGER NOT NULL,
-                teaterstykke_id INTEGER NOT NULL,
-                PRIMARY KEY(teaterstykke_id, rolleNavn),
-                FOREIGN KEY(skuespiller_id) REFERENCES skuespillere(id),
-                FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id),
-                FOREIGN KEY(rolleNavn) REFERENCES roller(rolleNavn))''')
-#rolleiakt
-cursor.execute('''CREATE TABLE IF NOT EXISTS rolleiakt
-                (rolleNavn INTEGER NOT NULL,
-                aktNummer INTEGER NOT NULL,
-                teaterstykke_id INTEGER NOT NULL,
-                PRIMARY KEY(rolleNavn, teaterstykke_id),
-                FOREIGN KEY(rolleNavn) REFERENCES roller(rolleNavn),
-                FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id),
-                FOREIGN KEY(aktNummer) REFERENCES akt(aktnummer))''')
-#teatersal
+#Teatersal
 cursor.execute('''CREATE TABLE IF NOT EXISTS Teatersal
                (Sesong TEXT NOT NULL,
-               SalNavn TEXT NOT NULL,
-               antallPlasser INTEGER NOT NULL)''')
+               Salnavn TEXT NOT NULL,
+               TeaterstykkeID INTEGER,
+               PRIMARY KEY(Sesong, Salnavn),
+               FOREIGN KEY(TeaterstykkeID) REFERENCES Teaterstykke(TeaterstykkeID))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS stoler
-                (sesong TEXT NOT NULL,
-                salNavn TEXT NOT NULL,
-                stolNummer INTEGER NOT NULL,
-                FOREIGN KEY(sesong) REFERENCES Teatersal(Sesong),
-                FOREIGN KEY(salNavn) REFERENCES Teatersal(SalNavn))''')
+#Stol
+cursor.execute('''CREATE TABLE IF NOT EXISTS Stol
+                (Sesong TEXT NOT NULL,
+                Salnavn TEXT NOT NULL,
+                Stolnummer INTEGER NOT NULL,
+                Radnummer INTEGER NOT NULL,
+                Områdenavn TEXT NOT NULL,
+                FOREIGN KEY(Sesong, Salnavn) REFERENCES Teatersal(Sesong, Salnavn),
+                PRIMARY KEY(Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS forestilling
-               (forestilling_id INTEGER PRIMARY KEY,
-               sesong TEXT NOT NULL,
-               salNavn TEXT NOT NULL,
-               dato TEXT NOT NULL,
-               klokkeslett TEXT NOT NULL,
-               teaterstykke_id INTEGER NOT NULL,
-               FOREIGN KEY(sesong) REFERENCES Teatersal(Sesong),
-               FOREIGN KEY(salNavn) REFERENCES Teatersal(SalNavn),
-               FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id))''')
+#Forestilling
+cursor.execute('''CREATE TABLE IF NOT EXISTS Forestilling
+               (ForestillingID INTEGER PRIMARY KEY,
+               Dato TEXT,
+               Klokkeslett TEXT,
+               TeaterstykkeID INTEGER NOT NULL,
+               FOREIGN KEY(TeaterstykkeID) REFERENCES Teaterstykke(TeaterstykkeID))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS billett
-               (billett_id INTEGER PRIMARY KEY,
-               pris INTEGER NOT NULL,
-               prisgruppe_id INTEGER NOT NULL,
-               stolNR INTEGER NOT NULL,
-               radNR INTEGER NOT NULL,
+#Billett
+cursor.execute('''CREATE TABLE IF NOT EXISTS Billett
+               (BillettID INTEGER PRIMARY KEY,
+               Sesong TEXT NOT NULL,
+               Salnavn TEXT NOT NULL,
+               Stolnummer INTEGER NOT NULL,
+               Radnummer INTEGER NOT NULL,
                Områdenavn TEXT NOT NULL,
-               forestilling_id INTEGER NOT NULL,
-               FOREIGN KEY(prisgruppe_id) REFERENCES prisgrupper(id),
-               FOREIGN KEY(forestilling_id) REFERENCES forestilling(forestilling_id))''')
+               FOREIGN KEY(Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn) REFERENCES Stol(Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS ansatt
-               (ansatt_id INTEGER PRIMARY KEY,
-               navn TEXT NOT NULL,
-               epost TEXT NOT NULL,
-               ansattStatus TEXT NOT NULL)''')
+#ForestillingBillett
+cursor.execute('''CREATE TABLE IF NOT EXISTS ForestillingBillett
+               (BillettID INTEGER PRIMARY KEY,
+               ForestillingID INTEGER NOT NULL,
+               FOREIGN KEY(ForestillingID) REFERENCES Forestilling(ForestillingID))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS oppgaver
-               (theaterstykke_id INTEGER NOT NULL,
-               oppgavetype TEXT NOT NULL,
-               PRIMARY KEY(theaterstykke_id, oppgavetype),
-               FOREIGN KEY(theaterstykke_id) REFERENCES teaterstykker(id))''')
+#Billettgruppe
+cursor.execute('''CREATE TABLE IF NOT EXISTS Billettgruppe
+               (BillettID INTEGER PRIMARY KEY,
+               TeaterstykkeID INTEGER NOT NULL,
+               Prisgruppenavn TEXT,
+               FOREIGN KEY(TeaterstykkeID, Prisgruppenavn) REFERENCES Prisgruppe(TeaterstykkeID, Prisgruppenavn))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS ansattIoppgave
-               (ansatt_id INTEGER NOT NULL,
-               teaterstykke_id INTEGER NOT NULL,
-               oppgavetype TEXT NOT NULL,
-               PRIMARY KEY(teaterstykke_id, oppgavetype),
-               FOREIGN KEY(ansatt_id) REFERENCES ansatt(ansatt_id),
-               FOREIGN KEY(teaterstykke_id) REFERENCES teaterstykker(id),
-               FOREIGN KEY(oppgavetype) REFERENCES oppgaver(oppgavetype))''')
+#BillettKjøp
+cursor.execute('''CREATE TABLE IF NOT EXISTS BillettKjøp
+               (BillettID INTEGER NOT NULL,
+               KundeProfilID INTEGER NOT NULL,
+               Dato TEXT,
+               Tid TEXT,
+               PRIMARY KEY(BillettID, KundeProfilID),
+               FOREIGN KEY(BillettID) REFERENCES Billett(BilletID)
+               FOREIGN KEY(KundeProfilID) REFERENCES KundeProfil(KundeProfilID))''')
+
+#KundeProfil
+cursor.execute('''CREATE TABLE IF NOT EXISTS KundeProfil
+               (KundeProfilID INTEGER PRIMARY KEY,
+               Mobilnummer INTEGER,
+               Navn TEXT,
+               Adresse TEXT)''')
+
+#Teaterstykke
+cursor.execute('''CREATE TABLE IF NOT EXISTS Teaterstykke
+                (TeaterstykkeID INTEGER PRIMARY KEY,
+                Name TEXT)''')
+
+#Prisgruppe
+cursor.execute('''CREATE TABLE IF NOT EXISTS Prisgruppe
+                (TeaterstykkeID INTEGER NOT NULL,
+                PrisgruppeNavn TEXT NOT NULL,
+                Pris INTEGER,
+                PRIMARY KEY(TeaterstykkeID, PrisgruppeNavn),
+                FOREIGN KEY(TeaterstykkeID) REFERENCES Teaterstykke(TeaterstykkeID))''')
+
+#Rolle
+cursor.execute('''CREATE TABLE IF NOT EXISTS Rolle
+                (TeaterstykkeID INTEGER NOT NULL,
+                Rollenavn TEXT,
+                PRIMARY KEY(Rollenavn, TeaterstykkeID),
+                FOREIGN KEY(TeaterstykkeID) REFERENCES Teaterstykke(TeaterstykkeID))''')
+
+#Akt
+cursor.execute('''CREATE TABLE IF NOT EXISTS Akt
+                (Aktnummer INTEGER NOT NULL,
+                TeaterstykkeID INTEGER NOT NULL,
+                Aktnavn TEXT,
+                PRIMARY KEY(Aktnummer, TeaterstykkeID),
+                FOREIGN KEY(TeaterstykkeID) REFERENCES Teaterstykke(TeaterstykkeID))''')
+
+#SkuespillerAnsatt
+cursor.execute('''CREATE TABLE IF NOT EXISTS SkuespillerAnsatt
+                (TeaterstykkeID INTEGER NOT NULL,
+                Rollenavn TEXT NOT NULL,
+                AnsattID INTEGER NOT NULL,
+                PRIMARY KEY(TeaterstykkeID, Rollenavn, AnsattID),
+                FOREIGN KEY(TeaterstykkeID) REFERENCES Teaterstykke(TeaterstykkeID),
+                FOREIGN KEY(TeaterstykkeID, Rollenavn) REFERENCES Rolle(TeaterstykkeID, Rollenavn))''')
+
+#RolleIAkt
+cursor.execute('''CREATE TABLE IF NOT EXISTS RolleIAkt
+                (Rollenavn TEXT NOT NULL,
+                Aktnummer INTEGER NOT NULL,
+                TeaterstykkeID INTEGER NOT NULL,
+                PRIMARY KEY(Rollenavn, Aktnummer, TeaterstykkeID),
+                FOREIGN KEY(TeaterstykkeID, Rollenavn) REFERENCES Rolle(TeaterstykkeID, Rollenavn),
+                FOREIGN KEY(TeaterstykkeID, Aktnummer) REFERENCES Akt(TeaterstykkeID, Aktnummer))''')
+
+#Ansatt
+cursor.execute('''CREATE TABLE IF NOT EXISTS Ansatt
+               (AnsattID INTEGER PRIMARY KEY,
+               Navn TEXT,
+               Epost TEXT,
+               AnsattStatus TEXT,
+               TeaterStykkeID INTEGER NOT NULL,
+               FOREIGN KEY(TeaterStykkeID) REFERENCES Teaterstykke(TeaterstykkeID))''')
+
+#Oppgave
+cursor.execute('''CREATE TABLE IF NOT EXISTS Oppgave
+               (TeaterStykkeID INTEGER NOT NULL,
+               Oppgavetype TEXT NOT NULL,
+               AnsattID INTEGER NOT NULL,
+               PRIMARY KEY(TeaterStykkeID, Oppgavetype),
+               FOREIGN KEY(TeaterStykkeID, Oppgavetype) REFERENCES Oppgave(TeaterStykkeID, Oppgavetype),
+               FOREIGN KEY(AnsattID) REFERENCES Ansatt(AnsattID))''')
 
 
 con.commit()
 
 # insert teaterstykker
-if(con.execute('''SELECT * FROM teaterstykker''').fetchone() == None):
-    con.execute('''INSERT INTO teaterstykker (id, name) VALUES (1, 'Kongsemnene')''')
-    con.execute('''INSERT INTO teaterstykker (id, name) VALUES (2, 'Størst av alt er kjærligheten')''')
+if(con.execute('''SELECT * FROM Teaterstykke''').fetchone() == None):
+    con.execute('''INSERT INTO Teaterstykke (TeaterstykkeID, Name) VALUES (1, 'Kongsemnene')''')
+    con.execute('''INSERT INTO Teaterstykke (TeaterstykkeID, Name) VALUES (2, 'Størst av alt er kjærligheten')''')
 
 # insert Saler
 if(con.execute('''SELECT * FROM Teatersal''').fetchone() == None):
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vinter2024', 'gamle scene', 332)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vinter2024', 'hovedscene', 516)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vår2024', 'gamle scene', 332)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, antallPlasser) VALUES ('vår2024', 'hovedscene', 516)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vinter2024', 'gamle scene')''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vinter2024', 'hovedscene')''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vår2024', 'gamle scene')''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vår2024', 'hovedscene')''')
 
-# insert foretillinger
-
-KongesemneneForestillinger = ['2024-02-01', '2024-02-02', '2024-02-03', '2024-02-05', '2024-02-06']
-StørstAvAltErKjærlighetenForestillinger = ['2024-02-03', '2024-02-06', '2024-02-07', '2024-02-12', '2024-02-13, 2024-02-14']
-if(con.execute('''SELECT * FROM forestilling''').fetchone() == None):
-    id =0
-    for i in KongesemneneForestillinger:
-        con.execute('''INSERT INTO forestilling (forestilling_id, sesong, salNavn, dato, klokkeslett, teaterstykke_id) VALUES (id, 'vinter2024', 'hovedscene', i, '19:00', 1)''')
+#insert forestillinger
+kongesemneneForestillinger = ['2024-02-01', '2024-02-02', '2024-02-03', '2024-02-05', '2024-02-06']
+størstAvAltErKjærlighetenForestillinger = ['2024-02-03', '2024-02-06', '2024-02-07', '2024-02-12', '2024-02-13', '2024-02-14']
+if(con.execute('''SELECT * FROM Forestilling''').fetchone() == None):
+    for id, i in enumerate(kongesemneneForestillinger):
+        con.execute(f"INSERT INTO forestilling (ForestillingID, Dato, Klokkeslett, TeaterstykkeID) VALUES ({id}, '{i}', '19:00', 1)")
         id += 1
-    for i in StørstAvAltErKjærlighetenForestillinger:
-        con.execute('''INSERT INTO forestilling (forestilling_id, sesong, salNavn, dato, klokkeslett, teaterstykke_id) VALUES (id, 'vinter2024', 'gamle scene', i, '18:30', 2)''')
+    for i in størstAvAltErKjærlighetenForestillinger:
+        con.execute(f"INSERT INTO forestilling (ForestillingID, Dato, Klokkeslett, TeaterstykkeID) VALUES ({id}, '{i}', '18:30', 2)")
         id += 1
     con.commit()
 
 
 # insert prisgrupper
-if(con.execute('''SELECT * FROM prisgrupper''').fetchone() == None):
-    con.execute('''INSERT INTO prisgrupper (id, prisgruppe) VALUES (1, 'Ordinær')''')
-    con.execute('''INSERT INTO prisgrupper (id, prisgruppe) VALUES (2, 'Honør')''')
-    con.execute('''INSERT INTO prisgrupper (id, prisgruppe) VALUES (3, 'Student')''')
-    con.execute('''INSERT INTO prisgrupper (id, prisgruppe) VALUES (4, 'Barn')''')
-    con.execute('''INSERT INTO prisgrupper (id, prisgruppe) VALUES (5, 'Gruppe 10')''')
-    con.execute('''INSERT INTO prisgrupper (id, prisgruppe) VALUES (6, 'Gruppe honør 10')''')
+if(con.execute('''SELECT * FROM Prisgruppe''').fetchone() == None):
+    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (1, 'Ordinær', 1)''') # TODO: Fiks priser!
+    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (2, 'Honør', 1)''')
+    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (3, 'Student', 1)''')
+    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (4, 'Barn', 1)''')
+    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (5, 'Gruppe 10', 1)''')
+    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (6, 'Gruppe honør 10', 1)''')
     con.commit()
 
 # insert prisgrupperITeaterstykker
-Kongesemnene = [1,2,3,5,6]
-StørstAvAltErKjærligheten = [1,2,3,4,5,6]
-KongesemnenePriser = [450,380,280,420,360]
-StørstAvAltErKjærlighetenPriser = [350,300,220,220,320,270]
+kongesemnene = [0, 1, 2, 4, 5]
+størstAvAltErKjærligheten = [0, 1, 2, 3, 4, 5]
+prisgruppeNavnListe = ["Ordinær","Honnør","Student","Barn","Gruppe 10","Gruppe Honnør"]
+kongesemnenePriser = [450, 380, 280, 420, 360]
+størstAvAltErKjærlighetenPriser = [350, 300, 220, 220, 320, 270]
 
-if(con.execute('''SELECT * FROM prisgrupperITeaterstykker''').fetchone() == None):
-    for i in range(len(Kongesemnene)):
-        con.execute('''INSERT INTO prisgrupperITeaterstyker (prisgruppe_id, teaterstykke_id, pris) VALUES (kongesemnene[i], 1, KongesemnenePriser[i])''')
-    for i in range(len(StørstAvAltErKjærligheten)):
-        con.execute('''INSERT INTO prisgrupperITeaterstyker (prisgruppe_id, teaterstykke_id, pris) VALUES (StørstAvAltErKjærligheten[i], 2, StørstAvAltErKjærlighetenPriser[i])''')
+if(con.execute('''SELECT * FROM Prisgruppe''').fetchone() == None):
+    for i in range(len(kongesemnene)):
+        con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (1, prisgruppeNavnListe[kongsemnene[i]], kongesemnenePriser[i])''')
+    for i in range(len(størstAvAltErKjærligheten)):
+        con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (2, prisgruppeNavnListe[størstAvAltErKjærligheten[i]], størstAvAltErKjærlighetenPriser[i])''')
     con.commit()
 
 #TODO: insert stoler
@@ -178,8 +200,8 @@ if(con.execute('''SELECT * FROM prisgrupperITeaterstykker''').fetchone() == None
 
 # Insert data
 
-gamleScene = 'db-projekt/gamle-scene.txt'
-hovedScene = 'db-projekt/hoved-scenen.txt'
+gamleScene = './gamle-scene.txt'
+hovedScene = './hoved-scenen.txt'
 
 # les gamle scene data
 
@@ -188,9 +210,5 @@ lines = openFile.readlines()
 openFile.close()
 lines = [line.strip() for line in lines]
 # for line in lines:
-
-
-
-
 
 con.close()
