@@ -212,10 +212,52 @@ if(con.execute('''SELECT * FROM Stol''').fetchone() == None):
 #TODO: insert billetter
 #TODO: insert ansatt
     
-#TODO: insert oppgaver
-# skriver [rolle, ansattnavn, ansattnavn...]
 kongesemneneOppgaver = [["inspirent", "Randi Andersen Gafseth", "Emily F. Luthentun"],["sufflør", "Ann Eli Aasgård"],[ "maskeansvarlig","Marianne Aunvik"], ["teknisk koordinator", "Martin Didrichsen"],["lysdesign","Eivind Myren"], ["dramaturg", "Mina Rype Stokke"], ["regi og musikkutvelgelse", "Yury Butusov"], ["scenografi og kostymer", "Aleksandr Shishkin-Hokisai"], ["lysmester", "Are Skarra Kvitnes"], ["lysbordoperatør", "Roger Indgul", "Oliver Løding","Harald Soltvedt" ], ["lyddesign", "Anders Schille"], ["rekvisittansvarlig", "Karl-Martin Hoddevik"], ["sceneansvarlig", "Geir Dyrdal"], ["stykkeansvarlig kostyme", "Trine Bjørhusdal"], ["stykkeansvarlig påkledere","Renee Desmond"], ["tapetserer", "Charlotta Winger"], ["snekker", "Egil Buseth"], ["metallarbeider", "Per Arne Johansen"], ["malersal","Toril Skipnes","Anita Gundersen"]]
 størstAvAltErKjærlighetenOppgaver = [["Regi", "Jonas Corell Petersen"], ["scenografi og kostymer", "David Gehrt"], ["musikalsk ansvarlig","Gaute Tønder"], ["lysdesign","Magnus Mikaelsen"], ["dramaturg", "Kristoffer Spender"], ["inspirent", "Line Åmil"], ["sufflør", "Lars Magnus Krogh Utne"], ["maskeansvarlig", "Livinger Ferner Diesen"], ["stykkeansvarlig rekvisitt", "Espen Høyem"], ["stykkeansvarlig kostyme", "Kjersti Eckhoff"], ["stykkeansvarlig påkledere", "Ida Marie Brønstad"], ["lyddesign", "Jan Magne Høyes","Siril Gaare"], ["videodesign","Stein Jørgen Øien"], ["lysbordoperator","Steffen Telstad"], ["sceneansvarlig", "Erik Chan"], ["snekker","Olav Rui"], ["metallarbeider", "Per Arne Johansen"], ["malersal", "Toril Skipnes","Anita Gundersen"]]
+
+fastAnsatte = ['Mira Dyrnes Askelund', 'Kine Bendixen', 'Ingrid Bergstrøm', 'Stephen Brandt-Hansen', 'Øyvind Brandtzæg', 'Emma Caroline Deichmann', 'Hildegunn Eggen', 'Carl Martin Eggesbø', 'Christian Eidem', 'Synnøve Fossum Eriksen', 'Ragne Grande', 'Per Bogstad Gulliksen', 'Tor Ivar Hagen', 'Erik J. Hauge', 'Hallvard Holmen', 'Kenneth Homstad', 'Paal Herman Ims', 'Håkon Mjåset Johansen', 'Janne Kokkin', 'Katja Brita Lindeberg', 'Fabian Heidelberg Lunde', 'Elisabeth Matheson', 'Kari Eline Kristvik Meinhardt', 'Marianne Meløy', 'Ivar Nergaard', 'Hans Petter Nilsen', 'Madeleine Brandtzæg Nilsen', 'Sunniva Du Mond Nordal', 'Emil Olafsson', 'Jovan Pavlovic', 'Iren Reppen', 'Jon Lockert Rohde', 'Jo Saberniak', 'Arturo Scotti', 'Trond-Ove Skrødal', 'Haakon Mustafa Akdokur Smestad', 'Marte M. Steinholt', 'Kathrine Strugstad', 'Isak Holmen Sørensen', 'Thomas Jensen Takyi', 'Natalie Grøndahl Tangen', 'Snorre Ryen Tøndel', 'Ståle Kvarme Tørring', 'Anna Ueland', 'Ingunn Beate Strige Øyen']
+
+ansatteIkonge = []
+for i in kongesemneneOppgaver:
+    for j in i:
+        if j>0:
+            ansatteIkonge.append(j)
+ansatteIkjærlighet = []
+for i in størstAvAltErKjærlighetenOppgaver:
+    for j in i:
+        if j>0:
+            ansatteIkjærlighet.append(j)
+        
+        
+fastAnsatteIkonge = []
+for i in ansatteIkonge:
+    if i in fastAnsatte:
+        fastAnsatteIkonge.append(j)
+fastAnsatteIkjærlighet = []
+for i in fastAnsatteIkjærlighet:
+    if i in fastAnsatte:        
+        fastAnsatteIkjærlighet.append(j)
+
+# insert fast ansatte
+    if(con.execute('''SELECT * FROM Ansatt''').fetchone() == None):
+        id = 0
+        for i in fastAnsatteIkonge:
+            con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', 1)")
+            id+=1
+        for i in fastAnsatteIkjærlighet:
+            con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', 2)")
+            id+=1
+        con.commit()
+
+if(con.execute('''SELECT * FROM Ansatt''').fetchone() == None):
+    id = 0
+    for i in fastAnsatte:
+        con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', NULL)")
+        id+=1
+    con.commit()
+    
+#TODO: insert oppgaver
+# skriver [rolle, ansattnavn, ansattnavn...]
 # if(con.execute('''SELECT * FROM oppgave''').fetchone() == None):
 #     for i in kongesemneneOppgaver:
 #         con.execute(f"INSERT INTO oppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (1, '{i}', NULL)")
@@ -226,8 +268,7 @@ skuespillereOgDemsRollerKongs = [["Arturo Scotti", "Haakon Haakonssønn"],["Ingu
      ["Synnøve Fossum Eriksen","Margrete (Skules datter)" ], ["Emma Caroline Deichmann","Sigrid (Skules søster) / Ingebjørg"], ["Thomas Jensen Takyi","Biskop Nikolas"],
      ["Per Bogstad Gulliksen", "Gregorius Jonssønn"],["Isak Holmen Sørensen","Paal Flida / Trønder"],["Fabian Heidelberg Lunde","Baard Bratte / Trønder"],["Emil Olafsson", "Jatgeir Skald / Dagfinn Bonde"],["Snorre Ryen Tøndel","Peter (prest og Ingebjørgs sønn)"]]
 skuespillereKjærlighet = ["Sunniva Du Mond Nordal","Jo Saberniak","Marte M. Steinholt","Tor Ivar Hagen","Trond-Ove Skrødal","Natalie Grøndahl Tangen", "Åsmund Flaten"]
-    
-    
+
     
     
     
@@ -245,6 +286,7 @@ skuespillereKjærlighet = ["Sunniva Du Mond Nordal","Jo Saberniak","Marte M. Ste
 #TODO: insert akt
 #TODO: insert roller
 #TODO: insert skuespillere
+
 #TODO: insert skuespillerIRolle
 #TODO: insert rolleiakt
 
