@@ -211,7 +211,20 @@ if(con.execute('''SELECT * FROM Stol''').fetchone() == None):
 
 #TODO: insert billetter
 #TODO: insert ansatt
+    
 #TODO: insert oppgaver
+# skriver [rolle, ansattnavn, ansattnavn...]
+kongesemneneOppgaver = [["inspirent", "Randi Andersen Gafseth", "Emily F. Luthentun"],["sufflør", "Ann Eli Aasgård"],[ "maskeansvarlig","Marianne Aunvik"], ["teknisk koordinator", "Martin Didrichsen"],["lysdesign","Eivind Myren"], ["dramaturg", "Mina Rype Stokke"], ["regi og musikkutvelgelse", "Yury Butusov"], ["scenografi og kostymer", "Aleksandr Shishkin-Hokisai"], ["lysmester", "Are Skarra Kvitnes"], ["lysbordoperatør", "Roger Indgul", "Oliver Løding","Harald Soltvedt" ], ["lyddesign", "Anders Schille"], ["rekvisittansvarlig", "Karl-Martin Hoddevik"], ["sceneansvarlig", "Geir Dyrdal"], ["stykkeansvarlig kostyme", "Trine Bjørhusdal"], ["stykkeansvarlig påkledere","Renee Desmond"], ["tapetserer", "Charlotta Winger"], ["snekker", "Egil Buseth"], ["metallarbeider", "Per Arne Johansen"], ["malersal","Toril Skipnes","Anita Gundersen"]]
+størstAvAltErKjærlighetenOppgaver = [["Regi", "Jonas Corell Petersen"], ["scenografi og kostymer", "David Gehrt"], ["musikalsk ansvarlig","Gaute Tønder"], ["lysdesign","Magnus Mikaelsen"], ["dramaturg", "Kristoffer Spender"], ["inspirent", "Line Åmil"], ["sufflør", "Lars Magnus Krogh Utne"], ["maskeansvarlig", "Livinger Ferner Diesen"], ["stykkeansvarlig rekvisitt", "Espen Høyem"], ["stykkeansvarlig kostyme", "Kjersti Eckhoff"], ["stykkeansvarlig påkledere", "Ida Marie Brønstad"], ["lyddesign", "Jan Magne Høyes","Siril Gaare"], ["videodesign","Stein Jørgen Øien"], ["lysbordoperator","Steffen Telstad"], ["sceneansvarlig", "Erik Chan"], ["snekker","Olav Rui"], ["metallarbeider", "Per Arne Johansen"], ["malersal", "Toril Skipnes","Anita Gundersen"]]
+# if(con.execute('''SELECT * FROM oppgave''').fetchone() == None):
+#     for i in kongesemneneOppgaver:
+#         con.execute(f"INSERT INTO oppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (1, '{i}', NULL)")
+#     for i in størstAvAltErKjærlighetenOppgaver:
+#         con.execute(f"INSERT INTO oppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (2, '{i}', NULL)")
+#     con.commit()
+
+
+
 #TODO: insert ansattIoppgave
 #TODO: insert akt
 #TODO: insert roller
