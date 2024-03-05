@@ -145,16 +145,17 @@ if(con.execute('''SELECT * FROM Teaterstykke''').fetchone() == None):
 
 # insert Saler
 if(con.execute('''SELECT * FROM Teatersal''').fetchone() == None):
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vinter2024', 'gamle scene')''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vinter2024', 'hovedscene')''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vår2024', 'gamle scene')''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn) VALUES ('vår2024', 'hovedscene')''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vinter2024', 'gamle scene', 1)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vinter2024', 'hovedscene', 2)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vår2024', 'gamle scene', 1)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vår2024', 'hovedscene', 2)''')
 
 #insert forestillinger
 kongesemneneForestillinger = ['2024-02-01', '2024-02-02', '2024-02-03', '2024-02-05', '2024-02-06']
 størstAvAltErKjærlighetenForestillinger = ['2024-02-03', '2024-02-06', '2024-02-07', '2024-02-12', '2024-02-13', '2024-02-14']
 if(con.execute('''SELECT * FROM Forestilling''').fetchone() == None):
-    for id, i in enumerate(kongesemneneForestillinger):
+    id = 0
+    for i in kongesemneneForestillinger:
         con.execute(f"INSERT INTO forestilling (ForestillingID, Dato, Klokkeslett, TeaterstykkeID) VALUES ({id}, '{i}', '19:00', 1)")
         id += 1
     for i in størstAvAltErKjærlighetenForestillinger:
@@ -162,32 +163,52 @@ if(con.execute('''SELECT * FROM Forestilling''').fetchone() == None):
         id += 1
     con.commit()
 
-
-# insert prisgrupper
-if(con.execute('''SELECT * FROM Prisgruppe''').fetchone() == None):
-    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (1, 'Ordinær', 1)''') # TODO: Fiks priser!
-    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (2, 'Honør', 1)''')
-    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (3, 'Student', 1)''')
-    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (4, 'Barn', 1)''')
-    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (5, 'Gruppe 10', 1)''')
-    con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (6, 'Gruppe honør 10', 1)''')
-    con.commit()
-
-# insert prisgrupperITeaterstykker
 kongesemnene = [0, 1, 2, 4, 5]
 størstAvAltErKjærligheten = [0, 1, 2, 3, 4, 5]
 prisgruppeNavnListe = ["Ordinær","Honnør","Student","Barn","Gruppe 10","Gruppe Honnør"]
 kongesemnenePriser = [450, 380, 280, 420, 360]
 størstAvAltErKjærlighetenPriser = [350, 300, 220, 220, 320, 270]
-
+# insert prisgrupper
 if(con.execute('''SELECT * FROM Prisgruppe''').fetchone() == None):
     for i in range(len(kongesemnene)):
-        con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (1, prisgruppeNavnListe[kongsemnene[i]], kongesemnenePriser[i])''')
+        con.execute(f"INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (1, '{prisgruppeNavnListe[kongesemnene[i]]}', {kongesemnenePriser[i]})")
     for i in range(len(størstAvAltErKjærligheten)):
-        con.execute('''INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (2, prisgruppeNavnListe[størstAvAltErKjærligheten[i]], størstAvAltErKjærlighetenPriser[i])''')
+        con.execute(f"INSERT INTO Prisgruppe (TeaterstykkeID, PrisgruppeNavn, Pris) VALUES (2, '{prisgruppeNavnListe[størstAvAltErKjærligheten[i]]}', {størstAvAltErKjærlighetenPriser[i]})")
     con.commit()
 
-#TODO: insert stoler
+sesonger = ["vinter2024", "vår2024"]
+gamleSceneOppsett = ["galleri","balkong","parkett"]
+gamleSceneStolerGalleri = [[33,18,17], [28,27,22,17],[18,16,17,18,18,17,18,17,17,14]]
+
+
+# insert stoler gamle scene og hovedscene
+if(con.execute('''SELECT * FROM Stol''').fetchone() == None):
+    for sesong in sesonger:
+        for område in gamleSceneOppsett:
+            for rad in range(len(gamleSceneStolerGalleri[gamleSceneOppsett.index(område)])):
+                for stol in range(gamleSceneStolerGalleri[gamleSceneOppsett.index(område)][rad]):
+                    con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn) VALUES ('{sesong}', 'gamle scene', {stol+1}, {rad+1}, '{område}')")
+    con.commit()
+    for sesong in sesonger:
+        for stol in range(524):
+            if stol < 504:
+                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn) VALUES ('{sesong}', 'hovedscene', {stol+1}, {(stol)//28 +1}, 'parkett')")
+            elif (stol < 514 and stol > 503):
+                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn) VALUES ('{sesong}', 'hovedscene', {stol+1}, {(stol-504)//5 +1}, 'nedre galleri')")
+            elif (stol < 524 and stol > 513):
+                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Områdenavn) VALUES ('{sesong}', 'hovedscene', {stol+1}, {(stol-514)//5 +1}, 'øvre galleri')")
+    con.commit()
+    for i in range(495,499):
+        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vår2024'")
+        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vinter2024'")
+    for i in range(467,471):
+        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vår2024'")
+        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vinter2024'")
+    con.commit()
+
+    
+
+
 #TODO: insert billetter
 #TODO: insert ansatt
 #TODO: insert oppgaver
