@@ -222,6 +222,22 @@ størstAvAltErKjærlighetenOppgaver = [["Regi", "Jonas Corell Petersen"], ["scen
 #     for i in størstAvAltErKjærlighetenOppgaver:
 #         con.execute(f"INSERT INTO oppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (2, '{i}', NULL)")
 #     con.commit()
+skuespillereOgDemsRollerKongs = [["Arturo Scotti", "Haakon Haakonssønn"],["Ingunn Beate Strige Øyen","Inga fra Vartejg (Haakons mor)"],["Hans Petter Nilsen","Skule jarl"],["Madeleine Brandtzæg Nilsen", "Fru Ragnhild (Skules hustru)"],
+     ["Synnøve Fossum Eriksen","Margrete (Skules datter)" ], ["Emma Caroline Deichmann","Sigrid (Skules søster) / Ingebjørg"], ["Thomas Jensen Takyi","Biskop Nikolas"],
+     ["Per Bogstad Gulliksen", "Gregorius Jonssønn"],["Isak Holmen Sørensen","Paal Flida / Trønder"],["Fabian Heidelberg Lunde","Baard Bratte / Trønder"],["Emil Olafsson", "Jatgeir Skald / Dagfinn Bonde"],["Snorre Ryen Tøndel","Peter (prest og Ingebjørgs sønn)"]]
+skuespillereKjærlighet = ["Sunniva Du Mond Nordal","Jo Saberniak","Marte M. Steinholt","Tor Ivar Hagen","Trond-Ove Skrødal","Natalie Grøndahl Tangen", "Åsmund Flaten"]
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
