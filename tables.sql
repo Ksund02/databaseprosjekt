@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Stol (
 CREATE TABLE IF NOT EXISTS Forestilling (
     ForestillingID INTEGER PRIMARY KEY NOT NULL, -- Kan bruke AUTOINCREMENT mellom PRIMARY KEY og NOT NULL
     Dato TEXT,
-    Klokkeslett TEXT,
+    Klokkeslett TEXT, -- TIMESTAMP
     TeaterstykkeID INTEGER NOT NULL,
     FOREIGN KEY(TeaterstykkeID) 
         REFERENCES Teaterstykke(TeaterstykkeID)
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS BillettKjop (
     BillettID INTEGER NOT NULL,
     KundeProfilID INTEGER NOT NULL,
     Dato TEXT,
-    Tid TEXT,
+    Tid TEXT, -- TIMESTAMP
     PRIMARY KEY(BillettID, KundeProfilID),
     FOREIGN KEY(BillettID) 
         REFERENCES Billett(BillettID)
