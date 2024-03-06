@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Stol (
 );
 
 CREATE TABLE IF NOT EXISTS Forestilling (
-    ForestillingID INTEGER PRIMARY KEY NOT NULL,
+    ForestillingID INTEGER PRIMARY KEY NOT NULL, -- Kan bruke AUTOINCREMENT mellom PRIMARY KEY og NOT NULL
     Dato TEXT,
     Klokkeslett TEXT,
     TeaterstykkeID INTEGER NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Forestilling (
 );
 
 CREATE TABLE IF NOT EXISTS Billett (
-    BillettID INTEGER PRIMARY KEY NOT NULL,
+    BillettID INTEGER PRIMARY KEY NOT NULL, -- Kan bruke AUTOINCREMENT mellom PRIMARY KEY og NOT NULL
     Sesong TEXT NOT NULL,
     Salnavn TEXT NOT NULL,
     Stolnummer INTEGER NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Billett (
 
 CREATE TABLE IF NOT EXISTS ForestillingBillett (
     BillettID INTEGER PRIMARY KEY NOT NULL,
-    ForestillingID INTEGER NOT NULL,
+    ForestillingID INTEGER NOT NULL, 
     FOREIGN KEY(ForestillingID) 
         REFERENCES Forestilling(ForestillingID)
             ON UPDATE CASCADE
@@ -82,14 +82,14 @@ CREATE TABLE IF NOT EXISTS BillettKjop (
 );
 
 CREATE TABLE IF NOT EXISTS KundeProfil (
-    KundeProfilID INTEGER PRIMARY KEY NOT NULL,
+    KundeProfilID INTEGER PRIMARY KEY NOT NULL, -- Kan bruke AUTOINCREMENT mellom PRIMARY KEY og NOT NULL
     Mobilnummer INTEGER,
     Navn TEXT,
     Adresse TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Teaterstykke (
-    TeaterstykkeID INTEGER PRIMARY KEY NOT NULL,
+    TeaterstykkeID INTEGER PRIMARY KEY NOT NULL, -- Kan bruke AUTOINCREMENT mellom PRIMARY KEY og NOT NULL
     Name TEXT
 );
 
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS RolleIAkt (
 );
 
 CREATE TABLE IF NOT EXISTS Ansatt (
-    AnsattID INTEGER PRIMARY KEY NOT NULL,
+    AnsattID INTEGER PRIMARY KEY NOT NULL, -- Kan bruke AUTOINCREMENT mellom PRIMARY KEY og NOT NULL
     Navn TEXT,
     Epost TEXT,
     AnsattStatus TEXT,
