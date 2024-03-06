@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Stol (
 );
 
 CREATE TABLE IF NOT EXISTS Forestilling (
-    ForestillingID INTEGER PRIMARY KEY,
+    ForestillingID INTEGER PRIMARY KEY NOT NULL,
     Dato TEXT,
     Klokkeslett TEXT,
     TeaterstykkeID INTEGER NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Forestilling (
 );
 
 CREATE TABLE IF NOT EXISTS Billett (
-    BillettID INTEGER PRIMARY KEY,
+    BillettID INTEGER PRIMARY KEY NOT NULL,
     Sesong TEXT NOT NULL,
     Salnavn TEXT NOT NULL,
     Stolnummer INTEGER NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Billett (
 );
 
 CREATE TABLE IF NOT EXISTS ForestillingBillett (
-    BillettID INTEGER PRIMARY KEY,
+    BillettID INTEGER PRIMARY KEY NOT NULL,
     ForestillingID INTEGER NOT NULL,
     FOREIGN KEY(ForestillingID) 
         REFERENCES Forestilling(ForestillingID)
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS ForestillingBillett (
 );
 
 CREATE TABLE IF NOT EXISTS Billettgruppe (
-    BillettID INTEGER PRIMARY KEY,
+    BillettID INTEGER PRIMARY KEY NOT NULL,
     TeaterstykkeID INTEGER NOT NULL,
     Prisgruppenavn TEXT,
     FOREIGN KEY(TeaterstykkeID, Prisgruppenavn) 
@@ -82,14 +82,14 @@ CREATE TABLE IF NOT EXISTS BillettKjop (
 );
 
 CREATE TABLE IF NOT EXISTS KundeProfil (
-    KundeProfilID INTEGER PRIMARY KEY,
+    KundeProfilID INTEGER PRIMARY KEY NOT NULL,
     Mobilnummer INTEGER,
     Navn TEXT,
     Adresse TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Teaterstykke (
-    TeaterstykkeID INTEGER PRIMARY KEY,
+    TeaterstykkeID INTEGER PRIMARY KEY NOT NULL,
     Name TEXT
 );
 
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS RolleIAkt (
 );
 
 CREATE TABLE IF NOT EXISTS Ansatt (
-    AnsattID INTEGER PRIMARY KEY,
+    AnsattID INTEGER PRIMARY KEY NOT NULL,
     Navn TEXT,
     Epost TEXT,
     AnsattStatus TEXT,
