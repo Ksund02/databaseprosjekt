@@ -170,14 +170,24 @@ CREATE TABLE IF NOT EXISTS Ansatt (
 CREATE TABLE IF NOT EXISTS Oppgave (
     TeaterStykkeID INTEGER NOT NULL,
     Oppgavetype TEXT NOT NULL,
-    AnsattID INTEGER NOT NULL,
     PRIMARY KEY(TeaterStykkeID, Oppgavetype),
     FOREIGN KEY(TeaterStykkeID) 
         REFERENCES Teaterstykke(TeaterStykkeID)
             ON UPDATE CASCADE
-            ON DELETE SET NULL,
+            ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS AnsattiOppgave (
+    AnsattID INTEGER NOT NULL,
+    TeaterStykkeID INTEGER NOT NULL,
+    Oppgavetype TEXT NOT NULL,
+    PRIMARY KEY(AnsattID, TeaterStykkeID, Oppgavetype),
+    FOREIGN KEY(TeaterStykkeID, Oppgavetype) 
+        REFERENCES Oppgave(TeaterStykkeID, Oppgavetype)
+            ON UPDATE CASCADE
+            ON DELETE CASCADE,
     FOREIGN KEY(AnsattID) 
         REFERENCES Ansatt(AnsattID)
             ON UPDATE CASCADE
-            ON DELETE SET NULL
+            ON DELETE CASCADE
 );
