@@ -144,12 +144,12 @@ con.commit()
 #                FOREIGN KEY(AnsattID) REFERENCES Ansatt(AnsattID))''')
 con.commit()
 
-# insert teaterstykker
+# Insert teaterstykker
 if(con.execute('''SELECT * FROM Teaterstykke''').fetchone() == None):
     con.execute('''INSERT INTO Teaterstykke (TeaterstykkeID, Name) VALUES (1, 'Kongsemnene')''')
     con.execute('''INSERT INTO Teaterstykke (TeaterstykkeID, Name) VALUES (2, 'Storst av alt er kjærligheten')''')
 
-# insert Saler
+# Insert Saler
 if(con.execute('''SELECT * FROM Teatersal''').fetchone() == None):
     con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vinter2024', 'gamle scene', 1)''')
     con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vinter2024', 'hovedscene', 2)''')
