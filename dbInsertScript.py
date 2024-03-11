@@ -142,8 +142,6 @@ con.commit()
 #                PRIMARY KEY(TeaterStykkeID, Oppgavetype),
 #                FOREIGN KEY(TeaterStykkeID, Oppgavetype) REFERENCES Oppgave(TeaterStykkeID, Oppgavetype),
 #                FOREIGN KEY(AnsattID) REFERENCES Ansatt(AnsattID))''')
-
-
 con.commit()
 
 # insert teaterstykker
@@ -224,6 +222,9 @@ if(con.execute('''SELECT * FROM KundeProfil''').fetchone() == None):
 
 
 #TODO: insert billetter
+#TODO: insert ForestillingBillett
+#TODO: insert Billetgruppe
+#TODO: insert BillettKjøp
 
 # Insert data
 
@@ -263,7 +264,8 @@ if(con.execute('''SELECT * FROM Billett''').fetchone() == None):
     for i in solgteBiletter:
         con.execute(f"INSERT INTO Billett (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('vinter2024', 'gamle scene', {i[0]}, {i[2]}, '{i[1]}')")
     con.commit()
-    
+
+#hovedscenen billetter
 
 kongesemneneOppgaver = [["inspirent", "Randi Andersen Gafseth", "Emily F. Luthentun"],["sufflor", "Ann Eli Aasgaard"],[ "maskeansvarlig","Marianne Aunvik"], ["teknisk koordinator", "Martin Didrichsen"],["lysdesign","Eivind Myren"], ["dramaturg", "Mina Rype Stokke"], ["regi og musikkutvelgelse", "Yury Butusov"], ["scenografi og kostymer", "Aleksandr Shishkin-Hokisai"], ["lysmester", "Are Skarra Kvitnes"], ["lysbordoperator", "Roger Indgul", "Oliver Loding","Harald Soltvedt" ], ["lyddesign", "Anders Schille"], ["rekvisittansvarlig", "Karl-Martin Hoddevik"], ["sceneansvarlig", "Geir Dyrdal"], ["stykkeansvarlig kostyme", "Trine Bjorhusdal"], ["stykkeansvarlig paakledere","Renee Desmond"], ["tapetserer", "Charlotta Winger"], ["snekker", "Egil Buseth"], ["metallarbeider", "Per Arne Johansen"], ["malersal","Toril Skipnes","Anita Gundersen"]]
 storstAvAltErKjærlighetenOppgaver = [["Regi", "Jonas Corell Petersen"], ["scenografi og kostymer", "David Gehrt"], ["musikalsk ansvarlig","Gaute Tonder"], ["lysdesign","Magnus Mikaelsen"], ["dramaturg", "Kristoffer Spender"], ["inspirent", "Line aamil"], ["sufflor", "Lars Magnus Krogh Utne"], ["maskeansvarlig", "Livinger Ferner Diesen"], ["stykkeansvarlig rekvisitt", "Espen Hoyem"], ["stykkeansvarlig kostyme", "Kjersti Eckhoff"], ["stykkeansvarlig paakledere", "Ida Marie Bronstad"], ["lyddesign", "Jan Magne Hoyes","Siril Gaare"], ["videodesign","Stein Jorgen oien"], ["lysbordoperator","Steffen Telstad"], ["sceneansvarlig", "Erik Chan"], ["snekker","Olav Rui"], ["metallarbeider", "Per Arne Johansen"], ["malersal", "Toril Skipnes","Anita Gundersen"]]
@@ -409,10 +411,8 @@ if(con.execute('''SELECT * FROM Rolle''').fetchone() == None):
     for rolle in skuespillereOgDemsRollerKongs:
         rollenavn = rolle[1]
         con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn) VALUES (1, '{rollenavn}')")
-        print(rollenavn)
     for rolle in skuespillereKjærlighet:
-        
-        con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn) VALUES (2, '{rollenavn}')")
+        con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn) VALUES (2, '{rolle}')")
     con.commit()
 
 
@@ -420,23 +420,18 @@ if(con.execute('''SELECT * FROM Rolle''').fetchone() == None):
 if(con.execute('''SELECT * FROM SkuespillerAnsatt''').fetchone() == None):
     for rolle in skuespillereOgDemsRollerKongs:
         ansattnavn = rolle[0]
-        ansattid = ansattogid[ansattnavn]
-        rollenavn = rolle[1]
-        con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn, AnsattID) VALUES (1, '{rollenavn}', '{ansattid}')")
-    for rolle in skuespillereKjærlighet:
-        ansattnavn = rolle[0]
-        ansattid = ansattogid[ansattnavn]
-        rollenavn = rolle[1]
-        con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn, AnsattID) VALUES (2, '{rollenavn}', '{ansattid}')")
+        if (ansattnavn in ansattogid.keys()):
+            ansattid = ansattogid[ansattnavn]
+            rollenavn = rolle[1]
+            con.execute(f"INSERT INTO SkuespillerAnsatt (TeaterstykkeID, Rollenavn, AnsattID) VALUES (1, '{rollenavn}', '{ansattid}')")
+    for ansattOgRolle in skuespillereKjærlighet:
+        if (ansattOgRolle in ansattogid.keys()):
+            ansattid = ansattogid[ansattnavn]
+            con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn, AnsattID) VALUES (2, '{rollenavn}', '{ansattid}')")
     con.commit()
 
 
 con.close()
-
-#TODO: insert ForestillingBillett
-#TODO: insert Billetgruppe
-
-#TODO: insert BillettKjøp
 """
 hello
 
