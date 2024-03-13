@@ -151,10 +151,8 @@ if(con.execute('''SELECT * FROM Teaterstykke''').fetchone() == None):
 
 # Insert Saler
 if(con.execute('''SELECT * FROM Teatersal''').fetchone() == None):
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vinter2024', 'gamle scene', 0)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vinter2024', 'hovedscene', 1)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vår2024', 'gamle scene', 0)''')
-    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vår2024', 'hovedscene', 1)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vaar/vinter 2024', 'gamle scene', 0)''')
+    con.execute('''INSERT INTO Teatersal (Sesong, SalNavn, TeaterstykkeID) VALUES ('vaar/vinter 2024', 'hovedscene', 1)''')
 
 # Insert forestillinger
 forestillinger = [
@@ -248,36 +246,31 @@ if(con.execute('''SELECT * FROM Stol''').fetchone() == None):
     con.commit()
 """
 
-sesonger = ["vinter2024", "vaar2024"]
 gamleSceneStruktur = {
-    "galleri": [33,18,17],
-    "balkong": [28,27,22,17],
-    "parkett": [18,16,17,18,18,17,18,17,17,14]
+    "Galleri": [33,18,17],
+    "Balkong": [28,27,22,17],
+    "Parkett": [18,16,17,18,18,17,18,17,17,14]
 }
 
 # insert stoler gamle scene og hovedscene
 if(con.execute('''SELECT * FROM Stol''').fetchone() == None):
-    for sesong in sesonger:
-        for omraade in gamleSceneStruktur.keys():
-            for rad in range(len(gamleSceneStruktur[omraade])):
-                for stol in range(gamleSceneStruktur[omraade][rad]):
-                    con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('{sesong}', 'gamle scene', {stol + 1}, {rad + 1}, '{omraade}')")
+    for omraade in gamleSceneStruktur.keys():
+        for rad in range(len(gamleSceneStruktur[omraade])):
+            for stol in range(gamleSceneStruktur[omraade][rad]):
+                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('vaar/vinter 2024', 'gamle scene', {stol + 1}, {rad + 1}, '{omraade}')")
     con.commit()
-    for sesong in sesonger:
-        for stol in range(524):
-            if stol < 504:
-                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('{sesong}', 'hovedscene', {stol + 1}, {(stol)//28 + 1}, 'parkett')")
-            elif (stol < 514 and stol > 503):
-                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('{sesong}', 'hovedscene', {stol + 1}, {(stol - 504)//5 + 1}, 'nedre galleri')")
-            elif (stol < 524 and stol > 513):
-                con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('{sesong}', 'hovedscene', {stol + 1}, {(stol - 514)//5 + 1}, 'ovre galleri')")
+    for stol in range(524):
+        if stol < 504:
+            con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('vaar/vinter 2024', 'hovedscene', {stol + 1}, {(stol)//28 + 1}, 'Parkett')")
+        elif (stol < 514 and stol > 503):
+            con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('vaar/vinter 2024', 'hovedscene', {stol + 1}, {(stol - 504)//5 + 1}, 'Nedre galleri')")
+        elif (stol < 524 and stol > 513):
+            con.execute(f"INSERT INTO Stol (Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ('vaar/vinter 2024', 'hovedscene', {stol + 1}, {(stol - 514)//5 + 1}, 'Ovre galleri')")
     con.commit()
     for i in range(495,499):
-        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vaar2024'")
-        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vinter2024'")
+        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vaar/vinter 2024'")
     for i in range(467,471):
-        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vaar2024'")
-        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vinter2024'")
+        con.execute(f"DELETE FROM Stol WHERE Stolnummer = {i} AND Salnavn = 'hovedscene' AND Sesong = 'vaar/vinter 2024'")
     con.commit()
 
 
@@ -285,126 +278,107 @@ kundeProfilEksempel = [12345678, 'Ola Nordmann', 'Verden']
 
 # insert Kundeprofil
 if(con.execute('''SELECT * FROM KundeProfil''').fetchone() == None):
-    con.execute(f'''INSERT INTO KundeProfil (KundeProfilID, Mobilnummer, Navn, Adresse) VALUES (1, {kundeProfilEksempel[0]}, '{kundeProfilEksempel[1]}', '{kundeProfilEksempel[2]}')''')
+    con.execute(f'''INSERT INTO KundeProfil (KundeProfilID, Mobilnummer, Navn, Adresse) VALUES (0, {kundeProfilEksempel[0]}, '{kundeProfilEksempel[1]}', '{kundeProfilEksempel[2]}')''')
     con.commit()
 
 #TODO: insert Billett
 # Insert data
-GenBillettID = 0
 gamleScene = './gamle-scene.txt'
 hovedScene = './hovedscenen.txt'
 
 # les gamle scene data
-
+GenBillettID = 0
+omraaderGamleScene = []
 with open(gamleScene, 'r') as openFile:
     lines = [line.strip() for line in openFile.readlines()]
     # for line in lines:
-    dato = lines[0]
+    datoGamleScene = lines[0]
     lines = lines[1:]
     lines.reverse()
-    områder = []
-    temp = []
+    stolerIOmraade = []
     for line in lines:
         if line not in ["Galleri", "Balkong", "Parkett"]:
-            temp.append(line)
+            stolerIOmraade.append(line)
         else:
-            temp = [line] + temp
-            områder.append(temp)
-            temp = []
+            stolerIOmraade = [line] + stolerIOmraade
+            omraaderGamleScene.append(stolerIOmraade)
+            stolerIOmraade = []
 
-Billetter = []
-BillettKjøp = []
-#Billetter = [[BillettID, Stolnummer, Radnummer, Omraadenavn],...]
-#Billettkjøp = [BillettID,...]
 
-for i in områder:
-    for j in range(len(i)):
-        if j>0:
-            temp = list(i[j])
-            for k in range(len(temp)):
-                if temp[k] == "1":
-                    Billetter.append([GenBillettID, k+1,j,i[0]])
-                    BillettKjøp.append(GenBillettID)
-                    GenBillettID += 1
-                elif temp[k] == "0":
-                    Billetter.append([GenBillettID, k+1,j,i[0]])
+
+#BilletterGamle = [[BillettID, Stolnummer, Radnummer, Omraadenavn],...]
+BilletterGamleScene = []
+for omraade in omraaderGamleScene:
+    for rad in range(len(omraade)):
+        if rad > 0:
+            radIOmraade = list(omraade[rad])
+            for k in range(len(radIOmraade)):
+                if radIOmraade[k] == "1":
+                    BilletterGamleScene.append([GenBillettID, k + 1, rad, omraade[0]])
                     GenBillettID += 1
 
 # Les hovedscene data
-openFile = open(hovedScene, 'r')
-lines = openFile.readlines()
-openFile.close()
-lines = [line.strip() for line in lines]
-# for line in lines:
-datoHoved = lines[0]
-lines = lines[1:]
-lines.reverse()
-områder = []
-temp = []
-for line in lines:
-    if line not in ["Galleri", "Parkett"]:
-        temp.append(line)
-    else:
-        temp = [line] + temp
-        områder.append(temp)
-        temp = []
-BilletterHoved = []
-BillettKjøpHoved = []
+omraaderHovedscene = []
+with open(hovedScene, 'r') as openFile:
+    lines = [line.strip() for line in openFile.readlines()]
+    # for line in lines:
+    datoHovedscenen = lines[0]
+    lines = lines[1:]
+    lines.reverse()
+    stolerIOmraade = []
+    for line in lines:
+        if line not in ["Galleri", "Parkett"]:
+            stolerIOmraade.append(line)
+        else:
+            stolerIOmraade = [line] + stolerIOmraade
+            omraaderHovedscene.append(stolerIOmraade)
+            stolerIOmraade = []
 
-for i in range(0,2):
-    for radIndex, radValues in enumerate(områder[i][1:]):
+BilletterHovedscene = []
+for sal in range(0, 2):
+    for radIndex, radValues in enumerate(omraaderHovedscene[sal][1:]):
         for numIndex, numValue in enumerate(list(radValues)): 
-            if i == 0: # Om område er Parkett
+            if sal == 0: # Om omraade er Parkett
                 #BilletterHoved = [[BillettID, Stolnummer, Radnummer, Omraadenavn],...]
                 #BillettkjøpHoved = [BillettID,...]
                 if numValue == "1":
-                    BilletterHoved.append([GenBillettID, numIndex+1+(28*radIndex), radIndex+1, områder[i][0]])
-                    BillettKjøpHoved.append(GenBillettID)
+                    BilletterHovedscene.append([GenBillettID, numIndex+1+(28*radIndex), radIndex+1, omraaderHovedscene[sal][0]])
                     GenBillettID+=1
-                elif numValue == "0":
-                    BilletterHoved.append([GenBillettID, numIndex+1+(28*radIndex), radIndex+1, områder[i][0]])
-                    GenBillettID+=1
-            elif i == 1: # Om område er Galleri
+            elif sal == 1: # Om omraade er Galleri
                 if numValue == "1":
-                    BilletterHoved.append([GenBillettID, numIndex+1+504+(5*radIndex), radIndex+1, områder[i][0]])
-                    BillettKjøpHoved.append(GenBillettID)
-                    GenBillettID+=1
-                elif numValue == "0":
-                    BilletterHoved.append([GenBillettID, numIndex+1+504+(5*radIndex), radIndex+1, områder[i][0]])
-                    GenBillettID+=1
-
-                    
+                    BilletterHovedscene.append([GenBillettID, numIndex+1+504+(5*radIndex), radIndex+1, omraaderHovedscene[sal][0]])
+                    GenBillettID+=1      
 
 # insert billetter
 if(con.execute('''SELECT * FROM Billett''').fetchone() == None):
-    for Billett in Billetter:
-        con.execute(f"INSERT INTO Billett (BillettID, Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ({Billett[0]}, 'vinter2024', 'gamle scene', {Billett[1]}, {Billett[2]}, '{Billett[3]}')")
-    for Billett in BilletterHoved:
-        con.execute(f"INSERT INTO Billett (BillettID, Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ({Billett[0]}, 'vinter2024', 'hovedscene', {Billett[1]}, {Billett[2]}, '{Billett[3]}')")
+    for Billett in BilletterGamleScene:
+        con.execute(f"INSERT INTO Billett (BillettID, Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ({Billett[0]}, 'vaar/vinter 2024', 'gamle scene', {Billett[1]}, {Billett[2]}, '{Billett[3]}')")
+    for Billett in BilletterHovedscene:
+        con.execute(f"INSERT INTO Billett (BillettID, Sesong, Salnavn, Stolnummer, Radnummer, Omraadenavn) VALUES ({Billett[0]}, 'vaar/vinter 2024', 'hovedscene', {Billett[1]}, {Billett[2]}, '{Billett[3]}')")
     con.commit()
 
 # insert BillettKjøp
 if(con.execute('''SELECT * FROM BillettKjop''').fetchone() == None):
-    for Billett in BillettKjøp:
-        con.execute(f"INSERT INTO BillettKjop (BillettID, KundeProfilID, Dato, Tid) VALUES ({Billett},1,'{dato}','00:00')")
-    for Billett in BillettKjøpHoved:
-        con.execute(f"INSERT INTO BillettKjop (BillettID, KundeProfilID, Dato, Tid) VALUES ({Billett},1, '{datoHoved}', '00:00')")
+    for Billett in BilletterGamleScene:
+        con.execute(f"INSERT INTO BillettKjop (BillettID, KundeProfilID, Dato, Tid) VALUES ({Billett[0]},0,'{datoGamleScene.split(" ")[1]}','00:00')")
+    for Billett in BilletterHovedscene:
+        con.execute(f"INSERT INTO BillettKjop (BillettID, KundeProfilID, Dato, Tid) VALUES ({Billett[0]},0, '{datoHovedscenen.split(" ")[1]}', '00:00')")
     con.commit()
 
 #: insert Billetgruppe
 if(con.execute('''SELECT * FROM Billettgruppe''').fetchone() == None):
-    for Billett in BillettKjøp:
-        con.execute(f"INSERT INTO Billettgruppe (BillettID, TeaterstykkeID, Prisgruppenavn) VALUES ({Billett},1,'Gruppe 10')")
-    for Billett in BillettKjøpHoved:
-        con.execute(f"INSERT INTO Billettgruppe (BillettID, TeaterstykkeID, Prisgruppenavn) VALUES ({Billett},0,'Gruppe 10')")
+    for Billett in BilletterGamleScene:
+        con.execute(f"INSERT INTO Billettgruppe (BillettID, TeaterstykkeID, Prisgruppenavn) VALUES ({Billett[0]},1,'Gruppe 10')")
+    for Billett in BilletterHovedscene:
+        con.execute(f"INSERT INTO Billettgruppe (BillettID, TeaterstykkeID, Prisgruppenavn) VALUES ({Billett[0]},0,'Gruppe 10')")
     con.commit()
 
 #: insert ForestillingBillett
 if(con.execute('''SELECT * FROM ForestillingBillett''').fetchone() == None):
-    for Billett in BillettKjøp:
-        con.execute(f"INSERT INTO ForestillingBillett (BillettID, ForestillingID) VALUES ({Billett},{forestillinger[1].index(dato.split(" ")[1])+len(forestillinger[0])})")
-    for Billett in BillettKjøpHoved:
-        con.execute(f"INSERT INTO ForestillingBillett (BillettID, ForestillingID) VALUES ({Billett},{forestillinger[0].index(datoHoved.split(" ")[1])})")
+    for Billett in BilletterGamleScene:
+        con.execute(f"INSERT INTO ForestillingBillett (BillettID, ForestillingID) VALUES ({Billett[0]},{forestillinger[1].index(datoGamleScene.split(" ")[1])+len(forestillinger[0])})")
+    for Billett in BilletterHovedscene:
+        con.execute(f"INSERT INTO ForestillingBillett (BillettID, ForestillingID) VALUES ({Billett[0]},{forestillinger[0].index(datoHovedscenen.split(" ")[1])})")
     con.commit()
 
 #hovedscenen billetter
@@ -501,16 +475,16 @@ fastAnsatte = [
 
 skuespillereOgDemsRollerKongs = [
     ["Arturo Scotti", "Haakon Haakonssonn"],
-    ["Ingunn Beate Strige oyen","Inga fra Vartejg (Haakons mor)"],
-    ["Hans Petter Nilsen","Skule jarl"],
+    ["Ingunn Beate Strige Oyen","Inga fra Vartejg (Haakons mor)"],
+    ["Hans Petter Nilsen","Skule Jarl"],
     ["Madeleine Brandtzæg Nilsen", "Fru Ragnhild (Skules hustru)"],
     ["Synnove Fossum Eriksen","Margrete (Skules datter)" ], 
-    ["Emma Caroline Deichmann","Sigrid (Skules soster) / Ingebjorg"],
+    ["Emma Caroline Deichmann","Sigrid (Skules soster)/Ingebjorg"],
     ["Thomas Jensen Takyi","Biskop Nikolas"],
     ["Per Bogstad Gulliksen", "Gregorius Jonssonn"],
-    ["Isak Holmen Sorensen","Paal Flida / Tronder"],
-    ["Fabian Heidelberg Lunde","Baard Bratte / Tronder"],
-    ["Emil Olafsson", "Jatgeir Skald / Dagfinn Bonde"],
+    ["Isak Holmen Sorensen","Paal Flida/Tronder 1"],
+    ["Fabian Heidelberg Lunde","Baard Bratte/Tronder 2"],
+    ["Emil Olafsson", "Jatgeir Skald/Dagfinn Bonde"],
     ["Snorre Ryen Tondel","Peter (prest og Ingebjorgs sonn)"]
 ]
 
@@ -560,24 +534,27 @@ for i in fastAnsatteIkjærlighet:
         fastAnsatteIkjærlighet.append(j)
 
 # insert fast ansatte
-#     if(con.execute('''SELECT * FROM Ansatt''').fetchone() == None):
-#         id = 0
-#         for i in fastAnsatteIkonge:
-#             con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', 0)")
-#             id+=1
-#         for i in fastAnsatteIkjærlighet:
-#             con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', 1)")
-#             id+=1
+# if(con.execute('''SELECT * FROM Ansatt''').fetchone() == None):
+#     id = 0
+#     for i in fastAnsatteIkonge:
+#         con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', 0)")
+#         id+=1
+#     for i in fastAnsatteIkjærlighet:
+#         con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', NULL, 'fast', 1)")
+#         id+=1
 
 # insert ansatte
-#TODO: insert direktør og sånt
+#TODO: insert direktør og saant
 ansattogid = {}
 if(con.execute('''SELECT * FROM Ansatt''').fetchone() == None):
     id = 0
-    # kanskje ikke nødvendig:
+    # IKKE NØDVENDIG FORDI INGEN AV DE ANSATTE HER ER FAST ANSATTE:
     # for i in fastAnsatte:
     #     con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, '{i}', '{i.split(' ')[0]+"@trøndelagteater.no"}', 'fast', NULL)")
     #     id+=1
+    con.execute(f"INSERT INTO Ansatt (AnsattID, Navn, Epost, AnsattStatus, TeaterstykkeID) VALUES ({id}, 'Elisabeth Egseth Hansen', 'elisabeth@trøndelagteater.no', 'fast', 0)")
+    ansattogid["Elisabeth Egseth Hansen"] = id
+    id +=1
     for i in ansatteIkonge:
         epost = i.split(' ')[0]+"@trøndelagteater.no"
         ansattogid[i] = id
@@ -592,6 +569,8 @@ if(con.execute('''SELECT * FROM Ansatt''').fetchone() == None):
 
 # insert oppgaver
 if(con.execute('''SELECT * FROM Oppgave''').fetchone() == None):
+    con.execute(f"INSERT INTO Oppgave (TeaterstykkeID, Oppgavetype) VALUES (0, 'Teatersjef')")
+    con.execute(f"INSERT INTO Oppgave (TeaterstykkeID, Oppgavetype) VALUES (1, 'Teatersjef')")
     for i in kongesemneneOppgaver:
         con.execute(f"INSERT INTO Oppgave (TeaterstykkeID, Oppgavetype) VALUES (0, '{i[0]}')")
     for i in storstAvAltErKjærlighetenOppgaver:
@@ -600,6 +579,8 @@ if(con.execute('''SELECT * FROM Oppgave''').fetchone() == None):
 
 # insert ansattIoppgave
 if(con.execute('''SELECT * FROM ansattioppgave''').fetchone() == None):
+    con.execute(f"INSERT INTO ansattioppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (0, 'Teatersjef', 0)")
+    con.execute(f"INSERT INTO ansattioppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (1, 'Teatersjef', 0)")
     for i in ansatteIkonge:
         con.execute(f"INSERT INTO ansattioppgave (TeaterstykkeID, Oppgavetype, AnsattID) VALUES (0, '{ansattogOppgaveIKongs[i]}', {ansattogid[i]})")
     for i in ansatteIkjærlighet:
@@ -612,7 +593,7 @@ if(con.execute('''SELECT * FROM akt''').fetchone() == None):
     # Kongsemnene av Henrik Ibsen (Hovedscenen)
     akterKonge = [1,2,3,4,5]
     for akt in akterKonge:
-        con.execute(f"INSERT INTO akt (Aktnummer, TeaterstykkeID, Aktnavn) VALUES ({akt},0,'test')")
+        con.execute(f"INSERT INTO akt (Aktnummer, TeaterstykkeID, Aktnavn) VALUES ({akt},0,'{"Akt "+str(akt)}')")
     # Størst av alt er kjærligheten av Jonas Corell Petersen(Gamle scene)
     con.execute(f"INSERT INTO akt (Aktnummer, TeaterstykkeID, Aktnavn) VALUES (1,1,'Akt 1')")
     con.commit()
@@ -623,20 +604,23 @@ if(con.execute('''SELECT * FROM akt''').fetchone() == None):
 if(con.execute('''SELECT * FROM rolleiakt''').fetchone() == None):
     # Kongsemnene av Henrik Ibsen (Hovedscenen)
     rolleIaktKonge = {
-    "Håkon Håkonson":[1,2,3,4,5],
-    "Dagfinn Bonde":[1,2,3,4,5],
-    "Jatgeir Skald":[4],
-    "Sigrid":[1,2,5],
-    "Ingeborg":[4],
-    "Guttorm Ingesson":[1],
-    "Skule Jarl":[1,2,3,4,5],
-    "Inga frå Vartejg":[1,3],
-    "Paal Flida":[1,2,3,4,5],
-    "Ragnhild":[1,5],
-    "Gregorius Jonsson":[1,2,3,4,5],
-    "Margrete":[1,2,3,4,5],
-    "Biskop Nikolas":[1,2,3],
-    "Peter":[3,4,5]         
+    "Haakon Haakonssonn": [1,2,3,4,5],
+    "Dagfinn Bonde": [1,2,3,4,5],
+    "Jatgeir Skald": [4],
+    "Sigrid (Skules soster)": [1,2,5],
+    "Ingebjorg":[4],
+    "Guttorm Ingesson": [1],
+    "Skule Jarl": [1,2,3,4,5],
+    "Inga fra Vartejg (Haakons mor)": [1,3],
+    "Paal Flida": [1,2,3,4,5],
+    "Fru Ragnhild (Skules hustru)": [1,5],
+    "Gregorius Jonssonn": [1,2,3,4,5],
+    "Margrete (Skules datter)": [1,2,3,4,5],
+    "Biskop Nikolas": [1,2,3],
+    "Peter (prest og Ingebjorgs sonn)": [3,4,5],
+    "Baard Bratte": [1,2,3],
+    "Tronder 1": [1,2,3],
+    "Tronder 2": [1,2,3],        
     }
 
     for rolle in rolleIaktKonge.keys():
@@ -651,9 +635,10 @@ if(con.execute('''SELECT * FROM rolleiakt''').fetchone() == None):
 
 # Insert roller
 if(con.execute('''SELECT * FROM Rolle''').fetchone() == None):
-    for rolle in skuespillereOgDemsRollerKongs:
-        rollenavn = rolle[1]
-        con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn) VALUES (0, '{rollenavn}')")
+    for person in skuespillereOgDemsRollerKongs:
+        roller = person[1].split("/")
+        for rolleNavn in roller:
+            con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn) VALUES (0, '{rolleNavn}')")
     for rolle in skuespillereKjærlighet:
         con.execute(f"INSERT INTO Rolle (TeaterstykkeID, Rollenavn) VALUES (1, '{rolle}')")
     con.commit()
@@ -665,8 +650,9 @@ if(con.execute('''SELECT * FROM SkuespillerAnsatt''').fetchone() == None):
         ansattnavn = rolle[0]
         if (ansattnavn in ansattogid.keys()):
             ansattid = ansattogid[ansattnavn]
-            rollenavn = rolle[1]
-            con.execute(f"INSERT INTO SkuespillerAnsatt (TeaterstykkeID, Rollenavn, AnsattID) VALUES (0, '{rollenavn}', '{ansattid}')")
+            roller = rolle[1].split("/")
+            for rollenavn in roller:
+                con.execute(f"INSERT INTO SkuespillerAnsatt (TeaterstykkeID, Rollenavn, AnsattID) VALUES (0, '{rollenavn}', '{ansattid}')")
     for ansattOgRolle in skuespillereKjærlighet:
         if (ansattOgRolle in ansattogid.keys()):
             ansattid = ansattogid[ansattOgRolle]

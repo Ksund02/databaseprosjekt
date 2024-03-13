@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS Teatersal (
     Salnavn TEXT NOT NULL,
     TeaterstykkeID INTEGER,
     PRIMARY KEY(Sesong, Salnavn),
-    FOREIGN KEY(TeaterstykkeID) 
+    FOREIGN KEY(TeaterstykkeID)
         REFERENCES Teaterstykke(TeaterstykkeID)
             ON UPDATE CASCADE
             ON DELETE SET NULL
