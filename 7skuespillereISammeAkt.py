@@ -1,15 +1,10 @@
 import sqlite3
+import sys
 
 con = sqlite3.connect('teater.db')
-
 cursor = con.cursor()
 
-# with open('getActorsInSamePlay.sql', 'r') as file:
-#     result = cursor.executescript(file.read())
-
-# inputNavn = input("Skriv inn navn: ")
-inputNavn = 'Arturo Scotti'
-
+skuespillerNavn = sys.argv[1] if len(sys.argv) > 1 else print("Mangler skuespiller")
 result = cursor.execute(f'''
     SELECT DISTINCT Ansatt2.Navn, Teaterstykke.Name
     FROM Ansatt AS Ansatt2
@@ -24,7 +19,7 @@ result = cursor.execute(f'''
         INNER JOIN Teaterstykke
             USING (TeaterstykkeID)
     WHERE (Akt2.AktNummer, Akt2.TeaterstykkeID) IN (
-        SELECT distinct Akt1.Aktnummer, Akt1.TeaterstykkeID
+        SELECT DISTINCT Akt1.Aktnummer, Akt1.TeaterstykkeID
         FROM Ansatt AS Ansatt1
             INNER JOIN SkuespillerAnsatt
                 USING (AnsattID)
@@ -34,10 +29,8 @@ result = cursor.execute(f'''
                 USING (TeaterstykkeID, Rollenavn)
             INNER JOIN Akt AS Akt1
                 USING (TeaterstykkeID, AktNummer)
-        WHERE Ansatt1.Navn = "{inputNavn}" AND Ansatt2.Navn <> Ansatt1.Navn)
+        WHERE Ansatt1.Navn = "{skuespillerNavn}" AND Ansatt2.Navn <> Ansatt1.Navn)
 ''')
 
-
 for row in result:
-    print(inputNavn +" | " + row[0] + " | " + row[1])
-
+    print(skuespillerNavn +" | " + row[0] + " | " + row[1])

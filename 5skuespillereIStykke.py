@@ -1,12 +1,10 @@
 import sqlite3
 
 con = sqlite3.connect('teater.db')
-
 cursor = con.cursor()
 
-with open('bestSolgteForestilliger.sql', 'r') as file:
+with open('skuespillereIStykke.sql', 'r') as file:
     result = cursor.execute(file.read())
 
-result = cursor.fetchall()
-for row in result:
-    print(row)
+for record in result:
+    print(record)
