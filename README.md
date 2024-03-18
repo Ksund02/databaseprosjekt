@@ -1,5 +1,7 @@
 # DB2: Realisert databasesystem
 
+Utfør brukstilfellene i dette dokumentet i kronologisk rekkefølge. Alle brukstilfeller har en kommando som skal kjøres i terminalen og tilhørende forventet output. Der hvor det er argumentverdier i kommandoen, er disse bare eksempler, og andre verdier vil også fungere.
+
 ## Innholdsfortegnelse
 
 - [Gruppe 4 medlemmer](#gruppe-4-medlemmer)
