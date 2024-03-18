@@ -1,3 +1,11 @@
+# DB2 Realisert databasesystem
+
+### Gruppe 4 medlemmer:
+
+- Mikkel Bakken Eggen
+- David Tuan Kiet Tran
+- Kristian Underdal
+
 # Brukstilfelle 1 og 2:
 
 Vi setter opp databasen via terminalen.
