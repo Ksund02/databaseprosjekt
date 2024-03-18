@@ -8,3 +8,5 @@ with open('skuespillereIStykke.sql', 'r') as file:
 
 for record in result:
     print(record)
+
+con.close()

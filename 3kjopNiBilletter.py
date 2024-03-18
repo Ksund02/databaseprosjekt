@@ -1,24 +1,25 @@
 import sqlite3
 
 con = sqlite3.connect('teater.db')
-
 cursor = con.cursor()
 
 # Finner rad med 9+ ledige stoler
 cursor.execute('''
-               SELECT Total.Radnummer, Total.Omraadenavn, (Total.AntallStoler - IFNULL(Kjopt.AntallKjopteStoler, 0)) AS LedigeStoler
-               FROM
-                (SELECT Billett.Radnummer, Billett.Omraadenavn, COUNT(*) AS "AntallKjopteStoler"
-                FROM Billett 
-                WHERE Billett.Salnavn = "gamle scene"
-                GROUP BY Billett.Radnummer, Billett.Omraadenavn) AS Kjopt
-                RIGHT JOIN
-                (SELECT Stol.Radnummer, Stol.Omraadenavn, COUNT(*) AS "AntallStoler"
-                FROM Stol
-                WHERE Stol.Sesong="vår/vinter 2024" AND Stol.Salnavn = "gamle scene"
-                GROUP BY Stol.Radnummer, Stol.Omraadenavn) AS Total
-               ON Kjopt.Radnummer = Total.Radnummer AND Kjopt.Omraadenavn=Total.Omraadenavn
-               WHERE LedigeStoler > 8
+    SELECT Total.Radnummer, Total.Omraadenavn, (Total.AntallStoler - IFNULL(Kjopt.AntallKjopteStoler, 0)) AS LedigeStoler
+    FROM (
+        SELECT Billett.Radnummer, Billett.Omraadenavn, COUNT(*) AS "AntallKjopteStoler"
+        FROM Billett 
+        WHERE Billett.Salnavn = "gamle scene"
+        GROUP BY Billett.Radnummer, Billett.Omraadenavn
+        ) AS Kjopt
+        RIGHT JOIN (
+            SELECT Stol.Radnummer, Stol.Omraadenavn, COUNT(*) AS "AntallStoler"
+            FROM Stol
+            WHERE Stol.Sesong = "vaar/vinter 2024" AND Stol.Salnavn = "gamle scene"
+            GROUP BY Stol.Radnummer, Stol.Omraadenavn
+        ) AS Total
+            ON Kjopt.Radnummer = Total.Radnummer AND Kjopt.Omraadenavn = Total.Omraadenavn
+    WHERE LedigeStoler > 8
                ''')
 
 radMed9LedigeStoler = cursor.fetchall()
@@ -29,20 +30,21 @@ if len(radMed9LedigeStoler) < 1:
 else:
     # Finner ni ledige stoler i samme rad, som blir koblet til billettene i applikasjonsnivået
     cursor.execute(f'''
-                   SELECT Stol.Sesong, Stol.Salnavn, Stol.Stolnummer, Stol.Radnummer, Stol.Omraadenavn
-                   FROM Stol
-                   WHERE Stol.Radnummer={radMed9LedigeStoler[0][0]} 
-                    AND Stol.Omraadenavn="{radMed9LedigeStoler[0][1]}"
-                    AND Stol.Sesong="vår/vinter 2024"
-                    AND Stol.Salnavn = "gamle scene"
-                    AND (Stol.Sesong, Stol.Salnavn, Stol.Stolnummer, Stol.Radnummer, Stol.Omraadenavn) NOT IN (
-                        SELECT Stol.Sesong, Stol.Salnavn, Stol.Stolnummer, Stol.Radnummer, Stol.Omraadenavn
-                        FROM Stol INNER JOIN Billett
-                        ON Stol.Sesong=Billett.Sesong 
-                            AND Stol.Salnavn=Billett.Salnavn 
-                            AND Stol.Stolnummer=Billett.Stolnummer
-                            AND Stol.Radnummer=Billett.Radnummer
-                            AND Stol.Omraadenavn=Billett.Omraadenavn 
+        SELECT Stol.Sesong, Stol.Salnavn, Stol.Stolnummer, Stol.Radnummer, Stol.Omraadenavn
+        FROM Stol
+        WHERE Stol.Radnummer = {radMed9LedigeStoler[0][0]} 
+            AND Stol.Omraadenavn = "{radMed9LedigeStoler[0][1]}"
+            AND Stol.Sesong="vaar/vinter 2024"
+            AND Stol.Salnavn = "gamle scene"
+            AND (Stol.Sesong, Stol.Salnavn, Stol.Stolnummer, Stol.Radnummer, Stol.Omraadenavn) NOT IN (
+                SELECT Stol.Sesong, Stol.Salnavn, Stol.Stolnummer, Stol.Radnummer, Stol.Omraadenavn
+                FROM Stol 
+                    INNER JOIN Billett
+                        ON Stol.Sesong = Billett.Sesong 
+                            AND Stol.Salnavn = Billett.Salnavn 
+                            AND Stol.Stolnummer = Billett.Stolnummer
+                            AND Stol.Radnummer = Billett.Radnummer
+                            AND Stol.Omraadenavn = Billett.Omraadenavn 
                         )
                    LIMIT 9
                    ''')
@@ -95,6 +97,7 @@ else:
     print("Du kjøper disse ni ledige stolene i samme rad i gamle scenen vår/vinter2024:")
     for stol in Stoler:
         print(f" {stol}")
+
     # Finner pris på ni billetter
     cursor.execute(f'''
                 SELECT Teaterstykke.TeaterstykkeID, Prisgruppe.PrisgruppeNavn, Prisgruppe.Pris
@@ -102,7 +105,10 @@ else:
                    ON Teaterstykke.TeaterstykkeID = Prisgruppe.TeaterstykkeID
                 WHERE Teaterstykke.Name = "Størst av alt er kjærligheten" AND PrisGruppeNavn="Ordinær"
                 ''')
+    
     prisForEn = cursor.fetchall()[0][2]
     prisForNi = prisForEn*9
     print("Takk for at du kjøpte ni billetter!")
-    print(f"Du brukte til sammen {prisForNi} kr for å kjøpe ni billetter i samme rad i gamle scenen vår/vinter2024 for Størst av alt er kjærligheten 3.februar")
+    print(f"Du brukte til sammen {prisForNi} kr for å kjøpe ni billetter i samme rad i gamle scenen vår/vinter2024 for Størst av alt er kjærligheten 3. februar")
+
+con.close()

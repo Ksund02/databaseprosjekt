@@ -34,3 +34,5 @@ result = cursor.execute(f'''
 
 for row in result:
     print(skuespillerNavn +" | " + row[0] + " | " + row[1])
+
+con.close()
