@@ -5,7 +5,7 @@ cursor = con.cursor()
 
 # Create tables
 
-with open('tables.sql', 'r') as schema:
+with open('tabeller.sql', 'r') as schema:
     schemaArray = schema.read().split(';')
     for command in schemaArray:
         cursor.execute(command)
