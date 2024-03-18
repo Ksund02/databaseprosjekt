@@ -1,12 +1,23 @@
-# DB2 Realisert databasesystem
+# DB2: Realisert databasesystem
 
-### Gruppe 4 medlemmer:
+## Innholdsfortegnelse
+
+- [Gruppe 4 medlemmer](#gruppe-4-medlemmer)
+- [Brukstilfelle 1 og 2](#brukstilfelle-1-og-2)
+- [Brukstilfelle 3](#brukstilfelle-3)
+- [Brukstilfelle 4](#brukstilfelle-4)
+- [Brukstilfelle 5](#brukstilfelle-5)
+- [Brukstilfelle 6](#brukstilfelle-6)
+- [Brukstilfelle 7](#brukstilfelle-7)
+- [Endringer fra DB1](#endringer-fra-db1)
+
+## Gruppe 4 medlemmer
 
 - Mikkel Bakken Eggen
 - David Tuan Kiet Tran
 - Kristian Underdal
 
-# Brukstilfelle 1 og 2:
+# Brukstilfelle 1 og 2
 
 Vi setter opp databasen via terminalen.
 Kjør følgende kommando for å opprette tabellene:
@@ -51,12 +62,12 @@ Alle solgte billetter er også blitt lagt til i databasen og ligger i tabellen B
 
 Da vil dataene bli laget som tabeller i "teater.db". Tabellene er definert i "tabeller.sql". Åpne databasefila for å direkte se hva som ligger i databasen. All informasjon for de to teaterstykkene er nå lagt inn, sammen med informasjon om selve Trøndelag Teater og dets saler/stoler, med andre ord er brukstilfelle 1 og 2 oppfylt her.
 
-# Brukstilfelle 3:
+# Brukstilfelle 3
 
-For å teste brukstilfelle 3 kan du kjøre kommandoen nedenfor. Her er andre argumenter også gyldige bare de følger det samme formatet på dato ('YYYY-MM-DD'):
+For å teste brukstilfelle 3 kjører man kommandoen nedenfor:
 
 ```py
-python .\9kjopNiBilletter.py "2024-02-03"
+python .\3kjopNiBilletter.py
 ```
 
 Etter å ha kjørt filen vil du i terminalen få opp hvilke stoler du har kjøpt for, og hvor mye disse ni billetene koster til sammen. All informasjon om billettene blir oppdatert i databasen samtidig med alle relasjonene for billett. Vi har nemlig laget et system der billettene bare blir laget når noen kjøper en ledig stolplass. Kundeprofilen som kjøper disse billettene vil da bli lagret som "Sensor{nummer}", der nummer avhenger av hvor mange ganger programmet er kjørt. Du kan kjøre programmet så mange ganger du vil. Til slutt vil det ikke være rader med ni ledige stoler igjen, så output blir da "Det er ingen rader med 9 ledige stoler igjen" (Om du vil ha tilbake den opprinnelige databasen, så sletter du "teater.db" og kjører "dbInsertScript.py" igjen).
@@ -90,7 +101,7 @@ Output:
 
 Her er andre argumenter også gyldige bare de følger det samme formatet på dato ('YYYY-MM-DD')
 
-# Brukstilfelle 5:
+# Brukstilfelle 5
 
 For å teste brukstilfelle 5, kjører man kommandoen:
 
@@ -134,7 +145,7 @@ Output:
 (All kode her er skrevet i en SQL query, men vi bruker bare pythonfilen for å enkelt kjøre SQL queryen
 Om du vil se SQL queryen åpner du "./skuespillereIStykke.sql")
 
-# Brukstilfelle 6:
+# Brukstilfelle 6
 
 For å teste brukstilfelle 6, kjører man kommandoen:
 
@@ -163,7 +174,7 @@ Output:
 (All kode her er skrevet i en SQL query, men vi bruker bare pythonfilen for å enkelt kjøre SQL queryen
 Om du vil se SQL queryen åpner du "./bestSolgteForestillinger.sql")
 
-# Brukstilfelle 7:
+# Brukstilfelle 7
 
 For å teste brukstilfelle 7, må man skrive inn navnet på filen som før sammen med navnet på en skuespiller. Deretter vil du få opp en oversikt i terminalen over hvilke andre skuespillere de har spilt med i samme akt i formatet ("skuespiller søkt på" | "annen skuespiller som har spilt med den søkte skuespilleren" | "skuespill")
 
@@ -189,7 +200,7 @@ Arturo Scotti | Emil Olafsson | Kongsemnene
 Arturo Scotti | Snorre Ryen Tondel | Kongsemnene
 ```
 
-# Endringer fra DB1:
+# Endringer fra DB1
 
 Endringer i ER-modellen:
 
