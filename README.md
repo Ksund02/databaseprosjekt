@@ -188,3 +188,13 @@ Arturo Scotti | Fabian Heidelberg Lunde | Kongsemnene
 Arturo Scotti | Emil Olafsson | Kongsemnene
 Arturo Scotti | Snorre Ryen Tondel | Kongsemnene
 ```
+
+# Endringer fra DB1:
+
+Endringer i ER-modellen:
+
+- Endret kardinaliteten mellom Billett og Kundeprofil fra (0,1) til (1,1), altså at Billett må ha en relasjon til en Kundeprofil. Siden vi alltid holder styr på kjøpte Billett-er, må nødvendigvis disse alltid være koblet til en Kundeprofil.
+
+- Endret kardinaliteten mellom Oppgave og Ansatt fra (0,1) til (0,n), altså kan en Oppgave bli gjort av flere Ansatte. Det må ikke nødvendigvis bare være én ansatt på hver oppgave, de kan ha samme oppgave.
+
+- Endret kardinaliteten mellom Ansatt og Teaterstykke fra (1,1) til (1,n), altså kan en Ansatt være ansatt på flere Teaterstykker. Dette gjelder blant annet direktøren for Trøndelag Teater som kan anses som ansatt i alle teaterstykker.
