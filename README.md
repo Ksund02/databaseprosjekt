@@ -206,6 +206,6 @@ Endringer i ER-modellen:
 
 - Endret kardinaliteten mellom Billett og Kundeprofil fra (0,1) til (1,1), altså at Billett må ha en relasjon til en Kundeprofil. Siden vi alltid holder styr på kjøpte Billett-er, må nødvendigvis disse alltid være koblet til en Kundeprofil.
 
-- Endret kardinaliteten mellom Oppgave og Ansatt fra (0,1) til (0,n), altså kan en Oppgave bli gjort av flere Ansatte. Det må ikke nødvendigvis bare være én ansatt på hver oppgave, de kan ha samme oppgave. AnsattIOppgave er en ny tabell som tar i bruk denne
+- Endret kardinaliteten mellom Oppgave og Ansatt fra (0,1) til (0,n), altså kan en Oppgave bli gjort av flere Ansatte. Det må ikke nødvendigvis bare være én ansatt på hver oppgave, de kan ha samme oppgave. AnsattIOppgave er en ny tabell opprettet som en konsekvens av denne endringen.
 
 Disse endringene er tatt hensyn til under opprettelsen av tabellene i **tabeller.sql**.
