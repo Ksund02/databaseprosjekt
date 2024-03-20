@@ -113,9 +113,6 @@ python .\5skuespillereIStykke.py
 
 Da skal terminalen fylles med tupler etter dette formatet: ('teaterstykke', 'skuespiller', 'rolle')
 
-(All kode her er skrevet i en SQL query, men vi bruker bare pythonfilen for å enkelt kjøre SQL queryen
-Om du vil se SQL queryen åpner du "./skuespillereIStykke.sql")
-
 Output:
 
 ```py
@@ -211,3 +208,5 @@ Endringer i ER-modellen:
 - Endret kardinaliteten mellom Oppgave og Ansatt fra (0,1) til (0,n), altså kan en Oppgave bli gjort av flere Ansatte. Det må ikke nødvendigvis bare være én ansatt på hver oppgave, de kan ha samme oppgave.
 
 - Endret kardinaliteten mellom Ansatt og Teaterstykke fra (1,1) til (1,n), altså kan en Ansatt være ansatt på flere Teaterstykker. Dette gjelder blant annet direktøren for Trøndelag Teater som kan anses som ansatt i alle teaterstykker.
+
+Disse endringene er tatt hensyn til under opprettelsen av tabellene i **tables.sql**.
