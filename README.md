@@ -25,7 +25,7 @@ Vi setter opp databasen via terminalen.
 Kjør følgende kommando for å opprette tabellene:
 
 ```py
-python .\dbInsertScript.py
+python .\1og2InnsettData.py
 ```
 
 Her er et eksempel på insatt data i Forestilling-tabellen etter å ha kjørt kommandoen ovenfor:
