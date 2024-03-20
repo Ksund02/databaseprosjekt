@@ -94,7 +94,8 @@ Fra terminalen kan man kjøre fila "4totaltSolgteBilletter.py". Denne tar inn en
 python .\4totaltSolgteBilletter.py "2024-02-03"
 ```
 
-Output:
+Output:</br>
+Avhengig av hvor mange billetter som ble kjøpt i brukstilfelle 3, kan output variere på 'Størst av alt er kjærligheten'.
 
 ```py
 ('Kongsemnene', 65)
@@ -152,7 +153,7 @@ For å teste brukstilfelle 6, kjører man kommandoen:
 python .\6bestSolgteForestillinger.py
 ```
 
-Deretter vil du få opp tupler etter dette formatet: ('teaterstykke', 'dato', 'antall solgte billetter'). Disse fremstiller alle de forskjellige forestillingene i synkende rekkefølge etter hvor mange solgte billetter hver forestilling har solgt.
+Deretter vil du få opp tupler etter dette formatet: ('teaterstykke', 'dato', 'antall solgte billetter'). Disse fremstiller alle de forskjellige forestillingene i synkende rekkefølge etter hvor mange solgte billetter hver forestilling har solgt. De med 0 solgte billetter dukker også opp.
 
 Output:
 
@@ -205,8 +206,6 @@ Endringer i ER-modellen:
 
 - Endret kardinaliteten mellom Billett og Kundeprofil fra (0,1) til (1,1), altså at Billett må ha en relasjon til en Kundeprofil. Siden vi alltid holder styr på kjøpte Billett-er, må nødvendigvis disse alltid være koblet til en Kundeprofil.
 
-- Endret kardinaliteten mellom Oppgave og Ansatt fra (0,1) til (0,n), altså kan en Oppgave bli gjort av flere Ansatte. Det må ikke nødvendigvis bare være én ansatt på hver oppgave, de kan ha samme oppgave.
+- Endret kardinaliteten mellom Oppgave og Ansatt fra (0,1) til (0,n), altså kan en Oppgave bli gjort av flere Ansatte. Det må ikke nødvendigvis bare være én ansatt på hver oppgave, de kan ha samme oppgave. AnsattIOppgave er en ny tabell som tar i bruk denne
 
-- Endret kardinaliteten mellom Ansatt og Teaterstykke fra (1,1) til (1,n), altså kan en Ansatt være ansatt på flere Teaterstykker. Dette gjelder blant annet direktøren for Trøndelag Teater som kan anses som ansatt i alle teaterstykker.
-
-Disse endringene er tatt hensyn til under opprettelsen av tabellene i **tables.sql**.
+Disse endringene er tatt hensyn til under opprettelsen av tabellene i **tabeller.sql**.
