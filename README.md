@@ -94,15 +94,16 @@ Fra terminalen kan man kjøre fila "4totaltSolgteBilletter.py". Denne tar inn en
 python .\4totaltSolgteBilletter.py "2024-02-03"
 ```
 
+Her er andre argumenter også gyldige bare de følger det samme formatet på dato ('YYYY-MM-DD').
+
 Output:</br>
-Avhengig av hvor mange billetter som ble kjøpt i brukstilfelle 3, kan output variere på 'Størst av alt er kjærligheten'.
 
 ```py
 ('Kongsemnene', 65)
-('Størst av alt er kjærligheten', 27)
+('Størst av alt er kjærligheten', 36)
 ```
 
-Her er andre argumenter også gyldige bare de følger det samme formatet på dato ('YYYY-MM-DD')
+**OBS:** Avhengig av hvor mange billetter som ble kjøpt i brukstilfelle 3, kan output variere på 'Størst av alt er kjærligheten'.
 
 # Brukstilfelle 5
 
